@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        String   @default("JEMAAT") 
+  attendances Attendance[]
+  posts       CommunityPost[]
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  type        String   
+  attendances Attendance[]
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+}
+
+model CommunityPost {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String   
+  content   String
+  isAnon    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model FamilyAltar {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  description String
+  bibleVerse  String   // Ayat Alkitab
+  content     String   // Isi renungan lengkap
+  createdAt   DateTime @default(now())
+}
