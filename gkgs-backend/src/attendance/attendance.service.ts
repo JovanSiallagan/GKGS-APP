@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service'; // Pastikan path ke PrismaService benar
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AttendanceService {
@@ -13,6 +13,7 @@ export class AttendanceService {
     if (!userId) {
       throw new BadRequestException('User ID tidak ditemukan. Pastikan Anda sudah login.');
     }
+
     // 1. Pastikan ID acara (Event ID) tidak kosong
     if (!eventId) {
       throw new BadRequestException('ID Acara (QR Code) tidak valid.');
@@ -39,30 +40,34 @@ export class AttendanceService {
       throw new BadRequestException('Anda sudah terdaftar hadir di acara ini.');
     }
 
-    // 4. Jika semua aman, catat kehadiran ke database
+    // 4. Jika semua aman, catat kehadiran ke database (tabel Attendance)
     const attendance = await this.prisma.attendance.create({
       data: {
-        user: { connect: { id: userId } }, 
+        user: { connect: { id: userId } },
         event: { connect: { id: eventId } },
       },
     });
 
-    // 5. Kembalikan data yang DIBUTUHKAN oleh Flutter!
-    // Karena di langkah 2 kita sudah mencari 'event', kita bisa langsung pakai datanya
+    // ======================================================================
+    // 5. UPDATE TOTAL HADIR DI TABEL EVENT (TAMBAH +1 SECARA FISIK DI DB)
+    // ======================================================================
+    await this.prisma.event.update({
+      where: { id: eventId },
+      data: {
+        totalHadir: {
+          increment: 1, // Ini akan otomatis menaikkan angka di Supabase
+        },
+      },
+    });
+
+    // 6. Kembalikan data yang DIBUTUHKAN oleh Flutter!
     return {
       success: true,
       message: 'Absensi berhasil',
       data: {
-        // Sesuaikan 'event.title' dengan nama kolom di schema.prisma Anda
         title: event.title,
-        
-        // Sesuaikan 'event.description' dengan nama kolom di schema.prisma Anda
-        // (misalnya: event.name, event.title, atau event.keterangan)
-        description: event.description, 
-        
-        // Sesuaikan 'event.date' dengan nama kolom di schema.prisma Anda
-        // (misalnya: event.tanggal, event.waktu, dsb)
-        date: event.date, 
+        description: event.description,
+        date: event.date,
       }
     };
   }

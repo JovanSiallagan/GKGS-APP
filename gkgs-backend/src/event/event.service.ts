@@ -15,26 +15,13 @@ export class EventService {
     });
   }
 
-  async findAll() {
-    // 1. Minta Prisma mengambil data acara + jumlah absennya
-    const events = await this.prisma.event.findMany({
-      include: {
-        _count: {
-          select: { attendances: true }, // Menghitung dari relasi tabel Attendance
-        },
-      },
+  findAll() {
+    // Sangat simpel! Prisma otomatis akan membawa data 'totalHadir'
+    // bersama dengan id, title, description, dan date ke Flutter.
+    return this.prisma.event.findMany({
       orderBy: {
-        date: 'desc' // (Bonus) Mengurutkan dari acara yang paling baru
-      }
+        date: 'desc', // Mengurutkan dari acara yang paling baru
+      },
     });
-
-    // 2. Format ulang bentuk JSON-nya agar lebih rapi untuk Flutter
-    return events.map((event) => ({
-      id: event.id,
-      title: event.title,
-      date: event.date,
-      description: event.description,
-      total_hadir: event._count.attendances, // Menyisipkan hasil hitungan ke variabel ini
-    }));
   }
 }
