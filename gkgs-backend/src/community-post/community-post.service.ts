@@ -4,18 +4,33 @@ import { CreateCommunityPostDto } from './dto/create-community-post.dto';
 
 @Injectable()
 export class CommunityPostService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  create(dto: CreateCommunityPostDto) {
+  // Logika untuk mengirim postingan baru
+  async create(createCommunityPostDto: CreateCommunityPostDto, userId: string) {
     return this.prisma.communityPost.create({
-      data: { ...dto, isAnon: dto.isAnon ?? false },
+      data: {
+        content: createCommunityPostDto.content,
+        type: createCommunityPostDto.type,
+        userId: userId, // ID User diambil dari token JWT yang sedang login
+      },
+      include: {
+        user: {
+          select: { name: true } // Mengembalikan nama pembuat postingan
+        }
+      }
     });
   }
 
-  findAll() {
+  // Logika untuk mengambil semua postingan
+  async findAll() {
     return this.prisma.communityPost.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { user: { select: { name: true } } }
+      orderBy: { createdAt: 'desc' }, // Urutkan dari yang paling baru
+      include: {
+        user: {
+          select: { name: true } // Menampilkan nama pembuatnya
+        }
+      }
     });
   }
 }

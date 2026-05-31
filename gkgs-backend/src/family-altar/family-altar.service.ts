@@ -1,23 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateFamilyAltarDto } from './dto/create-family-altar.dto';
 
 @Injectable()
 export class FamilyAltarService {
   constructor(private prisma: PrismaService) { }
 
-  create(dto: CreateFamilyAltarDto) {
-    const { date, ...rest } = dto; // Pisahkan 'date' dari data lainnya
-
-    return this.prisma.familyAltar.create({
-      data: {
-        ...rest,
-        date: new Date(date), // Ubah string tanggal menjadi format Date
-      },
+  async findAll() {
+    return this.prisma.familyAltar.findMany({
+      orderBy: { date: 'desc' }, // Urutkan dari tanggal terbaru
     });
   }
 
-  findAll() {
-    return this.prisma.familyAltar.findMany();
+  // Fungsi tambahan untuk bikin data dummy via Postman
+  async create(data: any) {
+    return this.prisma.familyAltar.create({
+      data: {
+        title: data.title,
+        date: new Date(data.date), // Pastikan format tanggal benar
+        description: data.description,
+        bibleVerse: data.bibleVerse,
+        content: data.content,
+      }
+    });
   }
 }

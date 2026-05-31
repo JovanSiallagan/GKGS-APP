@@ -1,18 +1,18 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
-import { CreateAttendanceDto } from './dto/create-attendance.dto';
+import { AuthGuard } from '@nestjs/passport'; // Mengamankan rute dengan JWT
 
 @Controller('attendance')
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) { }
 
-  @Post()
-  create(@Body() dto: CreateAttendanceDto) {
-    return this.attendanceService.create(dto);
-  }
+  // Memastikan yang absen harus punya token login
+  @UseGuards(AuthGuard('jwt'))
+  @Post('check-in')
+  checkIn(@Req() req, @Body('eventId') eventId: string) {
+    // jwt.strategy.ts mengembalikan payload berupa { userId: ..., email: ..., name: ... }
+    const userId = req.user?.userId;
 
-  @Get()
-  findAll() {
-    return this.attendanceService.findAll();
+    return this.attendanceService.checkIn(userId, eventId);
   }
 }

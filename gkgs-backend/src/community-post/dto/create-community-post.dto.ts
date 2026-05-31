@@ -1,8 +1,11 @@
-/* eslint-disable */
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { PostType } from '@prisma/client';
 
 export class CreateCommunityPostDto {
-  userId: string;
-  type: string;
+  @IsString()
+  @IsNotEmpty({ message: 'Konten postingan tidak boleh kosong' })
   content: string;
-  isAnon?: boolean;
+
+  @IsEnum(PostType, { message: 'Tipe harus PRAYER atau TESTIMONY' })
+  type: PostType;
 }

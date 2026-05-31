@@ -1,60 +1,104 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // Ubah ke "mysql" jika Anda menggunakan MySQL
   url      = env("DATABASE_URL")
 }
 
+// Tabel untuk Jemaat/Pengguna
 model User {
-  id          String   @id @default(uuid())
-  name        String
-  email       String   @unique
-  password    String
-  role        String   @default("JEMAAT") 
-  attendances Attendance[]
-  posts       CommunityPost[]
-}
-
-model Event {
-  id          String   @id @default(uuid())
-  title       String
-  date        DateTime
-  type        String   
-  attendances Attendance[]
-}
-
-model Attendance {
   id        String   @id @default(uuid())
-  userId    String
-  eventId   String
+  name      String
+  email     String   @unique
+  password  String
+
+  // --- TAMBAHAN DATA PROFIL ---
+  dob       DateTime? // Tanggal Lahir (Date of Birth)
+  gender    String?   // Jenis Kelamin ('L' atau 'P')
+  address   String?   // Alamat
+  phone     String?   // Nomor Telepon
+
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  event     Event    @relation(fields: [eventId], references: [id])
+  updatedAt DateTime @updatedAt
+
+  // Relasi: Satu user bisa membuat banyak postingan di Papan Interaksi
+  posts     CommunityPost[]
+  attendances Attendance[]
 }
 
-model CommunityPost {
-  id        String   @id @default(uuid())
-  userId    String
-  type      String   
-  content   String
-  isAnon    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-}
-
+// Tabel untuk Renungan (Sesuai dengan model FamilyAltar di Flutter)
 model FamilyAltar {
   id          String   @id @default(uuid())
   title       String
   date        DateTime
   description String
-  bibleVerse  String   // Ayat Alkitab
-  content     String   // Isi renungan lengkap
+  bibleVerse  String
+  content     String   @db.Text // Menggunakan Text karena isi renungan biasanya panjang
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Tipe Postingan untuk Papan Interaksi
+enum PostType {
+  PRAYER      // Doa
+  TESTIMONY   // Kesaksian
+}
+
+// Tabel untuk Papan Interaksi (Sesuai dengan model CommunityPost di Flutter)
+model CommunityPost {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  type      PostType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relasi: Setiap postingan dimiliki oleh satu User
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// Tabel untuk Acara / Event Gereja
+model Event {
+  id          String       @id @default(uuid())
+  title       String
+  date        DateTime
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relasi: Satu acara bisa dihadiri banyak orang (Attendance)
+  attendances Attendance[]
+}
+
+// Tabel untuk Presensi (Smart QR Check-in)
+model Attendance {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  // Relasi ke User (Siapa yang hadir)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  // Relasi ke Event (Hadir di acara apa)
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id])
+}
+
+
+model Warta {
+  id              String   @id @default(uuid())
+  tanggal         DateTime @default(now())
+  judul           String
+  imageUrl        String?  // Boleh kosong, nanti di Flutter dikasih gambar default
+  khotbahJudul    String
+  khotbahAyat     String
+  khotbahIsi      String
+  jadwalPelayanan String   // Input di Prisma: Peran: Nama (pisahkan tiap jadwal dengan Enter)
+  infoPenting     String   // Input di Prisma: Pisahkan tiap poin dengan Enter
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

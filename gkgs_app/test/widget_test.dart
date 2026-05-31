@@ -1,30 +1,17 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Tes dasar untuk memastikan aplikasi GKGS bisa berjalan.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:gkgs_app/main.dart';
+import 'package:gkgs_app/main.dart'; // Sesuaikan jika nama package Anda berbeda
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Aplikasi GKGS berhasil dimuat', (WidgetTester tester) async {
+    // Kita tambahkan parameter initialRoute agar GKGSApp tidak error
+    await tester.pumpWidget(const GKGSApp(initialRoute: '/login'));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Karena aplikasi Anda bukan aplikasi penghitung angka lagi,
+    // kita cukup mengecek apakah fondasi aplikasinya (MaterialApp) berhasil dimuat.
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
