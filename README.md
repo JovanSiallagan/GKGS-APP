@@ -480,24 +480,6 @@ Authorized API Access
 
 ---
 
-# Application Flow
-
-```text
-Login / Register
-        │
-        ▼
-      Home
-        │
- ┌──────┼──────┐
- ▼      ▼      ▼
-QR   Warta   Family Altar
- │      │          │
- ▼      ▼          ▼
-Bible Interaction Offering
-```
-
----
-
 # Future Development
 
 Potential future enhancements:
