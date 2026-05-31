@@ -260,24 +260,6 @@ gkgs_app/
 | Utils     | Helper functions and utilities              |
 | Theme     | Application styling and theme configuration |
 
-### Navigation Flow
-
-```text
-Login / Register
-        │
-        ▼
-      Home
-        │
- ┌──────┼──────┬──────┐
- ▼      ▼      ▼      ▼
-QR   Warta  Family  Bible
- │            │
- ▼            ▼
-Profile   Interaction Board
-                │
-                ▼
-            Offering
-```
 
 ---
 
