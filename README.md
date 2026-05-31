@@ -12,7 +12,7 @@
 
 ## Overview
 
-**GKGS App** is a mobile application developed for **Gereja Kristus Gading Serpong (GKGS)** to support church services and congregation engagement through a modern digital platform.
+**GKGS APP** is a mobile application developed for **Gereja Kristus Gading Serpong (GKGS)** to support church services and congregation engagement through a modern digital platform.
 
 The application integrates essential church activities into a single mobile experience, enabling congregation members to access church information, participate in spiritual growth programs, interact with the church community, record worship attendance, and access digital giving services.
 
@@ -242,7 +242,7 @@ gkgs_app/
 | Home Screen              | Main dashboard of the application        |
 | QR Attendance Screen     | Worship attendance via QR Code scanning  |
 | Warta Jemaat Screen      | Church announcements and weekly bulletin |
-| Family Altar Screen      | Daily devotion and family altar content  |
+| Family Altar Screen      | Weekly family altar content              |
 | Interaction Board Screen | Prayer requests and testimonies          |
 | Bible Reader Screen      | Integrated digital Bible reader          |
 | Offering Screen          | Digital offering and QRIS information    |
@@ -480,19 +480,6 @@ Authorized API Access
 
 ---
 
-# Future Development
-
-Potential future enhancements:
-
-* Push notifications
-* Live worship streaming
-* Attendance analytics dashboard
-* Event management
-* Ministry scheduling
-* Admin web dashboard
-* Community moderation tools
-
----
 
 # License
 
