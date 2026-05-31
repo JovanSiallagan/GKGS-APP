@@ -1,4 +1,4 @@
-# GKGS App
+# GKGS APP
 
 <p align="center">
   <img src="gkgs_app/assets/images/logo_gkgs.jpg" alt="GKGS Logo" width="200"/>
