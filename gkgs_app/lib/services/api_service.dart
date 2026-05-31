@@ -6,7 +6,7 @@ import '../models/community_post.dart';
 
 class ApiService {
   // Ganti IP jika pakai Emulator Android (10.0.2.2) atau HP fisik (IP WiFi Laptop)
-  static const String baseUrl = 'http://localhost:9425';
+  static const String baseUrl = 'https://gkgs-app.vercel.app';
 
   // --- AUTENTIKASI ---
 
@@ -126,15 +126,13 @@ class ApiService {
 
     // 2. Jika berhasil (201 atau 200), KEMBALIKAN DATA JSON-NYA!
     if (response.statusCode == 201 || response.statusCode == 200) {
-      return jsonDecode(response.body); 
+      return jsonDecode(response.body);
     } else {
       // Menangkap pesan error dari NestJS (misal: "Anda sudah terdaftar hadir")
       final errorData = jsonDecode(response.body);
       throw errorData['message'] ?? "Gagal melakukan absensi";
     }
   }
-
-
 
   // --- MENGAMBIL PROFIL USER ---
   Future<Map<String, dynamic>?> getUserProfile() async {
@@ -148,12 +146,12 @@ class ApiService {
         Uri.parse('$baseUrl/user/me'),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token", 
+          "Authorization": "Bearer $token",
         },
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body); 
+        return jsonDecode(response.body);
       }
     } catch (e) {
       print("Error fetching profile: $e");

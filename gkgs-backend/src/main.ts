@@ -1,20 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common'; // Tambahkan ini
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Mengaktifkan CORS untuk koneksi dari Flutter
-  app.enableCors();
+  // Mengaktifkan CORS secara eksplisit agar 100% aman di browser/web
+  app.enableCors({
+    origin: '*', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   // Mengaktifkan validasi global
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, // Otomatis membuang properti yang tidak ada di DTO
-    forbidNonWhitelisted: true, // Menolak request jika ada properti aneh
+    whitelist: true, 
+    forbidNonWhitelisted: true, 
   }));
 
-  // Menjalankan di port 9425 sesuai di api_service.dart
-  await app.listen(9425);
+  // PENTING: Gunakan port dari Vercel saat online, dan 9425 saat di laptop
+  const port = process.env.PORT || 9425;
+  await app.listen(port);
 }
 bootstrap();
