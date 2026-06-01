@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Untuk fitur copy to clipboard
 import 'dart:typed_data'; // Untuk memproses data gambar
-import 'package:image_gallery_saver/image_gallery_saver.dart'; // Package baru kita
-import 'package:permission_handler/permission_handler.dart';
+import 'package:gal/gal.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class OfferingScreen extends StatefulWidget {
@@ -302,13 +301,14 @@ class _OfferingScreenState extends State<OfferingScreen> {
 
     try {
       // 1. Minta Izin ke HP Pengguna (Ketuk Pintu)
-      var status = await Permission.storage.request();
 
-      if (status.isDenied || status.isPermanentlyDenied) {
-        status = await Permission.photos.request();
+      if (!await Gal.hasAccess()) {
+        await Gal.requestAccess();
       }
 
-      if (!status.isGranted && !status.isLimited) {
+      final hasAccess = await Gal.hasAccess();
+
+      if (!hasAccess) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -329,13 +329,13 @@ class _OfferingScreenState extends State<OfferingScreen> {
       );
       final Uint8List buffer = bytes.buffer.asUint8List();
 
-      final result = await ImageGallerySaver.saveImage(
+      await Gal.putImageBytes(
         buffer,
         name: "QRIS_GKGS_${DateTime.now().millisecondsSinceEpoch}",
       );
 
       // 3. Tampilkan pesan sukses
-      if (result['isSuccess'] == true && mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(

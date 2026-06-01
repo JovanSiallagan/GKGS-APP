@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FF), // surface
@@ -56,7 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
                   colors: [
-                    const Color(0xFFEFF4FF).withOpacity(0.8), // surface-container-low
+                    const Color(
+                      0xFFEFF4FF,
+                    ).withOpacity(0.8), // surface-container-low
                     Colors.transparent,
                   ],
                 ),
@@ -100,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        
+
         // Brand Name
         const Text(
           'GKGS',
@@ -113,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         // Welcome Message
         const Text(
           'Selamat Datang',
@@ -146,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            'Email atau Username',
+            'Email',
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 14,
@@ -164,7 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
             hintStyle: TextStyle(
               color: const Color(0xFF76777D).withOpacity(0.6), // outline/60
             ),
-            prefixIcon: const Icon(Icons.mail_outline, color: Color(0xFF45464D)),
+            prefixIcon: const Icon(
+              Icons.mail_outline,
+              color: Color(0xFF45464D),
+            ),
             filled: true,
             fillColor: const Color(0xFFE5EEFF), // surface-container
             border: OutlineInputBorder(
@@ -173,7 +179,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Colors.black, width: 1.5), // focus:border-primary
+              borderSide: const BorderSide(
+                color: Colors.black,
+                width: 1.5,
+              ), // focus:border-primary
             ),
             contentPadding: const EdgeInsets.symmetric(vertical: 16),
           ),
@@ -202,7 +211,10 @@ class _LoginScreenState extends State<LoginScreen> {
             hintStyle: TextStyle(
               color: const Color(0xFF76777D).withOpacity(0.6),
             ),
-            prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF45464D)),
+            prefixIcon: const Icon(
+              Icons.lock_outline,
+              color: Color(0xFF45464D),
+            ),
             suffixIcon: IconButton(
               icon: Icon(
                 _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -231,37 +243,43 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // Submit Button
         ElevatedButton(
-          onPressed: _isLoading ? null : () async {
-            setState(() {
-              _isLoading = true;
-            });
+          onPressed: _isLoading
+              ? null
+              : () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
 
-            ApiService api = ApiService();
-            // Panggil API login dengan data dari TextField
-            bool isSuccess = await api.login(
-              _emailController.text, 
-              _passwordController.text
-            );
+                  ApiService api = ApiService();
+                  // Panggil API login dengan data dari TextField
+                  bool isSuccess = await api.login(
+                    _emailController.text,
+                    _passwordController.text,
+                  );
 
-            setState(() {
-              _isLoading = false;
-            });
+                  setState(() {
+                    _isLoading = false;
+                  });
 
-            if (isSuccess) {
-              if (context.mounted) {
-                 context.go('/dashboard'); // Pindah ke dashboard jika sukses
-              }
-            } else {
-              if (context.mounted) {
-                 ScaffoldMessenger.of(context).showSnackBar(
-                   const SnackBar(
-                     content: Text("Login gagal! Periksa kembali email dan kata sandi Anda."),
-                     backgroundColor: Colors.red,
-                   ),
-                 );
-              }
-            }
-          },
+                  if (isSuccess) {
+                    if (context.mounted) {
+                      context.go(
+                        '/dashboard',
+                      ); // Pindah ke dashboard jika sukses
+                    }
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Login gagal! Periksa kembali email dan kata sandi Anda.",
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black, // primary
             foregroundColor: Colors.white, // on-primary
@@ -272,24 +290,31 @@ class _LoginScreenState extends State<LoginScreen> {
             elevation: 4,
             shadowColor: Colors.black.withOpacity(0.3),
           ),
-          child: _isLoading 
-            ? const SizedBox(
-                height: 20, width: 20, 
-                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-              )
-            : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Masuk',
-                    style: TextStyle(
-                      fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5,
-                    ),
+          child: _isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
                   ),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, size: 18),
-                ],
-              ),
+                )
+              : const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Masuk',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward, size: 18),
+                  ],
+                ),
         ),
       ],
     );

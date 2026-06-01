@@ -540,6 +540,7 @@ class DevotionalDetailScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF8F9FF).withOpacity(0.95),
         surfaceTintColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => context.pop(),
