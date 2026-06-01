@@ -8,10 +8,6 @@
   <b>Mobile Application for Gereja Kristus Gading Serpong (GKGS)</b>
 </p>
 
-<p align="center">
-  A digital platform designed to support worship, church communication, congregation engagement, and spiritual growth.
-</p>
-
 ---
 
 ## About
