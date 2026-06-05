@@ -206,3 +206,4 @@ The application will automatically connect to the deployed backend and database 
 ## License
 
 This project was developed for educational purposes and church ministry services at Gereja Kristus Gading Serpong (GKGS).
+
