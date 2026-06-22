@@ -20,6 +20,18 @@ The frontend is built using Flutter, while the backend is developed using NestJS
 
 ---
 
+## ⚠️ Technical Disclaimer & Deployment Notes
+
+The **GKGS App** utilizes **Free Tier** cloud development infrastructure for its backend and database deployment. Consequently, users may experience temporary delays or slow data loading times during initial access due to the following technical limitations:
+
+* **Backend Cold Starts (Vercel/Render Free Tier):** Because the backend server is hosted on a free hosting tier, it automatically enters a "sleep" mode after periods of inactivity. Upon opening the application for the first time, the server requires approximately **30–60 seconds** to wake up (*cold start*) before it can process API requests.
+* **Database Hibernation (Supabase Free Tier):** The PostgreSQL database on Supabase's free tier may experience intermittent latency or brief pausing if it hasn't been queried recently. Waking up the database instance adds an initial delay to the first data fetch.
+* **Bandwidth & Rate Limiting:** Data transfer speeds are subject to the strict bandwidth caps imposed by free-tier cloud providers.
+
+> **Note for Evaluators/Lecturers:** If the application appears to hang on a loading screen during the initial launch, please allow up to 1 minute for the backend server to complete its warm-up process, or try restarting the app after a few moments. Once the server is active, subsequent data transactions and features will function at normal speeds.
+
+---
+
 ## Features
 
 ### Home Dashboard
