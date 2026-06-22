@@ -28,8 +28,6 @@ The **GKGS App** utilizes **Free Tier** cloud development infrastructure for its
 * **Database Hibernation (Supabase Free Tier):** The PostgreSQL database on Supabase's free tier may experience intermittent latency or brief pausing if it hasn't been queried recently. Waking up the database instance adds an initial delay to the first data fetch.
 * **Bandwidth & Rate Limiting:** Data transfer speeds are subject to the strict bandwidth caps imposed by free-tier cloud providers.
 
-> **Note for Evaluators/Lecturers:** If the application appears to hang on a loading screen during the initial launch, please allow up to 1 minute for the backend server to complete its warm-up process, or try restarting the app after a few moments. Once the server is active, subsequent data transactions and features will function at normal speeds.
-
 ---
 
 ## Features
