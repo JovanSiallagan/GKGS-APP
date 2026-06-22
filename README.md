@@ -1,486 +1,209 @@
 # GKGS APP
 
 <p align="center">
-  <img src="gkgs_app/assets/images/logo_gkgs.jpg" alt="GKGS Logo" width="200"/>
+  <img src="gkgs_app/assets/images/logo_gkgs.jpg" alt="GKGS Logo" width="180"/>
 </p>
 
 <p align="center">
-  <b>A Digital Church Platform for Worship, Fellowship, and Spiritual Growth</b>
+  <b>Mobile Application for Gereja Kristus Gading Serpong (GKGS)</b>
 </p>
 
 ---
 
-## Overview
+## About
 
-**GKGS APP** is a mobile application developed for **Gereja Kristus Gading Serpong (GKGS)** to support church services and congregation engagement through a modern digital platform.
+GKGS App is a mobile application developed for Gereja Kristus Gading Serpong (GKGS) to provide church services in a modern and accessible digital platform.
 
-The application integrates essential church activities into a single mobile experience, enabling congregation members to access church information, participate in spiritual growth programs, interact with the church community, record worship attendance, and access digital giving services.
+The application allows congregation members to access church information, participate in spiritual growth programs, record worship attendance through QR Codes, share prayer requests and testimonies, read the Bible digitally, and access digital offering services directly from their mobile devices.
 
-The system consists of a **Flutter-based mobile application** and a **NestJS backend server** connected to a **PostgreSQL database** through **Prisma ORM**.
-
----
-
-## Main Features
-
-### Smart QR Attendance
-
-Digital worship attendance system using QR Codes.
-
-**Features**
-
-* QR Code scanning for worship attendance
-* Automatic attendance recording
-* Digital attendance history
-
-**Benefits**
-
-* Faster attendance process
-* Reduced manual administration
-* Accurate attendance tracking
+The frontend is built using Flutter, while the backend is developed using NestJS and deployed online. Data is managed through a PostgreSQL database hosted on Supabase.
 
 ---
 
-### Warta Jemaat (Church News)
+## Features
 
-Digital church bulletin and announcement platform.
+### Home Dashboard
 
-**Features**
+Centralized dashboard providing quick access to all church services available in the application.
 
-* Weekly church announcements
-* Sermon information
-* Ministry schedules
-* Important church updates
+### Warta Jemaat
 
-**Benefits**
+Digital church bulletin containing:
 
-* Easy access to church information
-* Environmentally friendly alternative to printed bulletins
-* Real-time updates for congregation members
-
----
+* Weekly announcements
+* Church activities
+* Service schedules
+* Important church information
 
 ### Family Altar
 
-Daily devotional feature designed to support spiritual growth.
+Spiritual growth feature that provides:
 
-**Features**
-
-* Daily devotion content
-* Scripture references
-* Reflection materials
-* Family worship resources
-
-**Benefits**
-
-* Encourages consistent devotional habits
-* Supports family worship activities
-* Accessible anytime through mobile devices
-
----
-
-### Interaction Board
-
-A community platform where congregation members can share prayer requests and testimonies.
-
-**Post Types**
-
-* **Prayer Request**
-* **Testimony**
-
-**Benefits**
-
-* Strengthens church fellowship
-* Encourages spiritual support among members
-* Creates a sense of community engagement
-
----
+* Family Altar materials
+* Bible references
+* Reflection content
+* Family devotion resources
 
 ### Digital Bible
 
-Built-in Bible reader integrated directly into the application.
+Built-in Bible reader that allows users to:
 
-**Features**
+* Browse books of the Bible
+* Read chapters directly within the application
+* Support personal devotion and worship activities
 
-* Read books and chapters of the Bible
-* Accessible within the app
-* Supports worship and devotional activities
+### QR Attendance
 
----
+Digital attendance system for worship services.
+
+Features include:
+
+* QR Code scanning
+* Automatic attendance recording
+* Attendance history tracking
+
+### Interaction Board
+
+Community feature where congregation members can share:
+
+* Prayer Requests
+* Testimonies
+
+This feature encourages fellowship and mutual spiritual support among church members.
 
 ### Digital Offering
 
-Digital giving feature to facilitate church offerings.
+Cashless giving feature providing:
 
-**Features**
+* QRIS payment support
+* Church offering information
+* Easy access to digital giving
 
-* QRIS support
-* Offering information
-* Cashless giving support
+### User Profile
 
-**Benefits**
+Personal account management including:
 
-* Convenient contribution process
-* Supports hybrid and online worship
-* Modern donation experience
-
----
-
-# System Architecture
-
-```text
-Flutter Mobile Application
-            │
-            ▼
-        REST API
-            │
-            ▼
-      NestJS Backend
-            │
-            ▼
-       Prisma ORM
-            │
-            ▼
-       PostgreSQL
-```
+* User information
+* Account details
+* Profile management
 
 ---
 
-# Technology Stack
 
-## Frontend
+## Technology Stack
+
+### Frontend
 
 * Flutter
 * Dart
 * Go Router
 * Shared Preferences
-* HTTP Package
 * Mobile Scanner
 
-## Backend
+### Backend
 
 * NestJS
 * TypeScript
 * Prisma ORM
-* PostgreSQL
 * JWT Authentication
+
+### Database
+
+* PostgreSQL
+
+### Deployment
+
+* Vercel (Backend)
+* Supabase (Database)
 
 ---
 
-# Project Structure
+## System Architecture
+
+```text
+Flutter Mobile Application
+            │
+            ▼
+         REST API
+            │
+            ▼
+      NestJS Backend
+        (Vercel)
+            │
+            ▼
+       Prisma ORM
+            │
+            ▼
+ PostgreSQL Database
+      (Supabase)
+```
+
+---
+
+## Project Structure
 
 ```text
 GKGS-APP
 │
-├── gkgs_app/          # Flutter Frontend
+├── gkgs_app/          # Flutter Application
 ├── gkgs-backend/      # NestJS Backend
-├── data_awal_gkgs.sql # Sample Database
+├── GKGS.apk           # Android Release APK
 └── README.md
 ```
 
 ---
 
-# Frontend Structure
+## Installation
 
-The frontend application is built using Flutter and follows a feature-based structure to separate UI components, business logic, models, and services.
+### Option 1 — Install APK (Recommended)
 
-```text
-gkgs_app/
-│
-├── assets/
-│   ├── images/
-│   └── icons/
-│
-├── lib/
-│   │
-│   ├── models/
-│   │   ├── attendance_model.dart
-│   │   ├── bible_model.dart
-│   │   ├── family_altar_model.dart
-│   │   ├── user_model.dart
-│   │   └── ...
-│   │
-│   ├── services/
-│   │   ├── api_service.dart
-│   │   ├── auth_service.dart
-│   │   ├── attendance_service.dart
-│   │   ├── bible_service.dart
-│   │   └── ...
-│   │
-│   ├── screens/
-│   │   ├── auth/
-│   │   ├── attendance/
-│   │   ├── family_altar/
-│   │   ├── bible/
-│   │   ├── community/
-│   │   ├── offering/
-│   │   ├── profile/
-│   │   └── home/
-│   │
-│   ├── widgets/
-│   │   ├── common/
-│   │   ├── cards/
-│   │   └── components/
-│   │
-│   ├── routes/
-│   │   └── app_router.dart
-│   │
-│   ├── constants/
-│   ├── utils/
-│   ├── theme/
-│   └── main.dart
-│
-├── pubspec.yaml
-└── README.md
-```
+The easiest way to try the application is by installing the provided APK.
 
-### Main Screens
+Steps:
 
-| Screen                   | Description                              |
-| ------------------------ | ---------------------------------------- |
-| Login Screen             | User authentication page                 |
-| Register Screen          | New congregation member registration     |
-| Home Screen              | Main dashboard of the application        |
-| QR Attendance Screen     | Worship attendance via QR Code scanning  |
-| Warta Jemaat Screen      | Church announcements and weekly bulletin |
-| Family Altar Screen      | Weekly family altar content              |
-| Interaction Board Screen | Prayer requests and testimonies          |
-| Bible Reader Screen      | Integrated digital Bible reader          |
-| Offering Screen          | Digital offering and QRIS information    |
-| Profile Screen           | User profile and account information     |
-
-### Core Components
-
-| Component | Responsibility                              |
-| --------- | ------------------------------------------- |
-| Models    | Represent application data structures       |
-| Services  | Handle API communication and business logic |
-| Screens   | Main user interface pages                   |
-| Widgets   | Reusable UI components                      |
-| Routes    | Navigation management using Go Router       |
-| Utils     | Helper functions and utilities              |
-| Theme     | Application styling and theme configuration |
-
+1. Download `GKGS.apk`.
+2. Transfer the APK to an Android device.
+3. Install the application.
+4. Open GKGS App and start using it.
 
 ---
 
-# Backend Structure
+### Option 2 — Run from Source Code
 
-The backend follows a modular architecture provided by NestJS.
+Backend and database services are already deployed online.
 
-```text
-gkgs-backend/
-│
-├── prisma/
-│   ├── schema.prisma
-│   └── migrations/
-│
-├── src/
-│   ├── auth/
-│   ├── users/
-│   ├── attendance/
-│   ├── family-altar/
-│   ├── warta/
-│   ├── community-post/
-│   ├── offering/
-│   └── main.ts
-│
-├── package.json
-└── .env
-```
+To run the application locally, only the Flutter project is required.
 
----
-
-# Database Schema
-
-The application uses several core entities to support church services and congregation engagement.
-
-| Model             | Description                                                              |
-| ----------------- | ------------------------------------------------------------------------ |
-| **User**          | Stores congregation account and profile information.                     |
-| **FamilyAltar**   | Stores devotional and family altar content.                              |
-| **CommunityPost** | Stores interaction board posts created by congregation members.          |
-| **Attendance**    | Stores worship attendance records generated through QR scanning.         |
-| **Warta**         | Stores church announcements, sermon information, and ministry schedules. |
-
-### Community Post Types
-
-| Type          | Description                                        |
-| ------------- | -------------------------------------------------- |
-| **PRAYER**    | Prayer requests submitted by congregation members. |
-| **TESTIMONY** | Testimonies shared by congregation members.        |
-
----
-
-# Installation Guide
-
-## Prerequisites
-
-### Frontend
-
-* Flutter SDK
-* Android Studio
-* Android SDK
-
-### Backend
-
-* Node.js (v18+ recommended)
-* npm
-* PostgreSQL
-
----
-
-## 1. Clone Repository
+#### Clone Repository
 
 ```bash
 git clone https://github.com/JovanSiallagan/GKGS-APP.git
-cd GKGS-APP
 ```
 
----
-
-## 2️. Backend Setup
-
-Navigate to backend folder:
+#### Navigate to Flutter Project
 
 ```bash
-cd gkgs-backend
+cd GKGS-APP/gkgs_app
 ```
 
-Install dependencies:
-
-```bash
-npm install
-```
-
----
-
-### Configure Environment Variables
-
-Create a `.env` file:
-
-```env
-DATABASE_URL="postgresql://username:password@localhost:5432/gkgs_db"
-JWT_SECRET="your-secret-key"
-```
-
----
-
-### Generate Prisma Client
-
-```bash
-npx prisma generate
-```
-
----
-
-### Run Database Migration
-
-```bash
-npx prisma migrate dev
-```
-
----
-
-### Import Sample Data
-
-This repository includes sample data to simplify testing and demonstration.
-
-```bash
-psql -U postgres -d gkgs_db -f ../data_awal_gkgs.sql
-```
-
-Alternatively, import the SQL file using pgAdmin.
-
-The sample database includes:
-
-* User accounts
-* Family Altar content
-* Church News (Warta)
-* Prayer Requests
-* Testimonies
-* Attendance records
-
----
-
-### Run Backend Server
-
-Development mode:
-
-```bash
-npm run start:dev
-```
-
-Production mode:
-
-```bash
-npm run start:prod
-```
-
-Backend URL:
-
-```text
-http://localhost:3000
-```
-
----
-
-## 3️. Frontend Setup
-
-Navigate to Flutter project:
-
-```bash
-cd ../gkgs_app
-```
-
-Install dependencies:
+#### Install Dependencies
 
 ```bash
 flutter pub get
 ```
 
-Run application:
+#### Run Application
 
 ```bash
 flutter run
 ```
 
-Build APK:
+The application will automatically connect to the deployed backend and database services.
 
-```bash
-flutter build apk
-```
-
-Generated APK location:
-
-```text
-build/app/outputs/flutter-apk/app-release.apk
-```
 
 ---
 
-# Authentication
+## License
 
-GKGS App uses JWT-based authentication.
+This project was developed for educational purposes and church ministry services at Gereja Kristus Gading Serpong (GKGS).
 
-```text
-User Login
-    │
-    ▼
-Credential Validation
-    │
-    ▼
-JWT Token Generation
-    │
-    ▼
-Token Storage
-    │
-    ▼
-Authorized API Access
-```
-
----
-
-
-# License
-
-This project is intended for educational, research, and church ministry purposes.
