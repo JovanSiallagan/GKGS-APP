@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Untuk fitur copy to clipboard
-import 'dart:typed_data'; // Untuk memproses data gambar
+import 'package:flutter/services.dart';
+import 'dart:typed_data';
 import 'package:gal/gal.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -12,7 +12,6 @@ class OfferingScreen extends StatefulWidget {
 }
 
 class _OfferingScreenState extends State<OfferingScreen> {
-  // Fungsi untuk menyalin nomor rekening ke clipboard
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -39,14 +38,13 @@ class _OfferingScreenState extends State<OfferingScreen> {
           _buildQrisSection(),
           const SizedBox(height: 24),
           _buildBankTransferSection(),
-          const SizedBox(height: 32), // Padding aman bawah
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
   // --- WIDGET COMPONENTS ---
-
   Widget _buildHeaderSection() {
     return Column(
       children: [
@@ -54,23 +52,23 @@ class _OfferingScreenState extends State<OfferingScreen> {
           'Persembahan',
           style: TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 26, // headline-lg-mobile
+            fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.black, // primary
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFFEFF4FF), // surface-container-low
+            color: const Color(0xFFEFF4FF),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: const Color(0xFFC6C6CD).withOpacity(0.3),
-            ), // outline-variant/30
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.04), // ambient-shadow
+                color: Colors.black.withOpacity(0.04),
                 blurRadius: 15,
                 offset: const Offset(0, 4),
               ),
@@ -84,7 +82,7 @@ class _OfferingScreenState extends State<OfferingScreen> {
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 16,
-                  color: Color(0xFF45464D), // on-surface-variant
+                  color: Color(0xFF45464D),
                   fontStyle: FontStyle.italic,
                   height: 1.5,
                 ),
@@ -111,7 +109,7 @@ class _OfferingScreenState extends State<OfferingScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white, // surface-container-lowest
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFC6C6CD).withOpacity(0.3)),
         boxShadow: [
@@ -128,13 +126,12 @@ class _OfferingScreenState extends State<OfferingScreen> {
             'Scan QRIS',
             style: TextStyle(
               fontFamily: 'Montserrat',
-              fontSize: 20, // headline-sm
+              fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black, // primary
+              color: Colors.black,
             ),
           ),
           const SizedBox(height: 24),
-          // Gambar QRIS Placeholder
           Container(
             width: 200,
             height: 200,
@@ -150,13 +147,12 @@ class _OfferingScreenState extends State<OfferingScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          // Tombol Simpan QR
           OutlinedButton(
             onPressed: () {
               _saveQrCode();
             },
             style: OutlinedButton.styleFrom(
-              backgroundColor: const Color(0xFFE5EEFF), // surface-container
+              backgroundColor: const Color(0xFFE5EEFF),
               side: BorderSide(color: const Color(0xFFC6C6CD).withOpacity(0.3)),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               minimumSize: const Size(double.infinity, 48),
@@ -218,12 +214,11 @@ class _OfferingScreenState extends State<OfferingScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              // Icon Bank
               Container(
                 width: 48,
                 height: 48,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFE5EEFF), // surface-container
+                  color: Color(0xFFE5EEFF),
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -231,7 +226,6 @@ class _OfferingScreenState extends State<OfferingScreen> {
                 ),
               ),
               const SizedBox(width: 16),
-              // Detail Rekening
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +235,7 @@ class _OfferingScreenState extends State<OfferingScreen> {
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
-                        color: Color(0xFF45464D), // on-surface-variant
+                        color: Color(0xFF45464D),
                       ),
                     ),
                     Text(
@@ -264,7 +258,6 @@ class _OfferingScreenState extends State<OfferingScreen> {
                   ],
                 ),
               ),
-              // Tombol Copy
               IconButton(
                 icon: const Icon(Icons.content_copy, color: Colors.black),
                 onPressed: () => _copyToClipboard('4013011501'),
@@ -279,9 +272,7 @@ class _OfferingScreenState extends State<OfferingScreen> {
     );
   }
 
-  // Fungsi untuk menyimpan QRIS ke Galeri HP
   Future<void> _saveQrCode() async {
-    // --- PENCEGAT KHUSUS WEB (CHROME) ---
     if (kIsWeb) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -295,12 +286,10 @@ class _OfferingScreenState extends State<OfferingScreen> {
           ),
         );
       }
-      return; // Berhenti di sini, jangan jalankan kode Android/iOS di bawah!
+      return;
     }
-    // ------------------------------------
 
     try {
-      // 1. Minta Izin ke HP Pengguna (Ketuk Pintu)
 
       if (!await Gal.hasAccess()) {
         await Gal.requestAccess();
@@ -323,7 +312,6 @@ class _OfferingScreenState extends State<OfferingScreen> {
         return;
       }
 
-      // 2. Jika diizinkan, Ambil dan Simpan Gambarnya
       final ByteData bytes = await rootBundle.load(
         'assets/images/qris_gkgs.jpg',
       );
@@ -334,7 +322,6 @@ class _OfferingScreenState extends State<OfferingScreen> {
         name: "QRIS_GKGS_${DateTime.now().millisecondsSinceEpoch}",
       );
 
-      // 3. Tampilkan pesan sukses
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

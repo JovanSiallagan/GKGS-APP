@@ -1,9 +1,9 @@
 class CommunityPost {
   final String id;
   final String content;
-  final String type; // 'PRAYER' atau 'TESTIMONY'
+  final String type;
   final DateTime createdAt;
-  final String userName; // Nama yang posting
+  final String userName;
 
   CommunityPost({
     required this.id,
@@ -19,7 +19,7 @@ class CommunityPost {
       content: json['content'],
       type: json['type'],
       createdAt: DateTime.parse(json['createdAt']),
-      userName: json['user']['name'], // Mengambil nama dari relasi user di NestJS
+      userName: json['user']['name'],
     );
   }
 }

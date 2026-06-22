@@ -22,7 +22,7 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF), // clean, airy background
+      backgroundColor: const Color(0xFFF8F9FF),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF8F9FF).withOpacity(0.95),
         surfaceTintColor: Colors.transparent,
@@ -68,7 +68,7 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
                 const SizedBox(height: 32),
                 _buildContentSection(data),
                 const SizedBox(height: 32),
-                const SizedBox(height: 32), // Safe area bottom
+                const SizedBox(height: 32),
               ],
             ),
           );
@@ -132,7 +132,7 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFFDCE9FF), // surface-container-high
+            color: const Color(0xFFDCE9FF),
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
@@ -150,7 +150,7 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
           data['judul'] ?? 'Warta Jemaat Minggu Ini',
           style: const TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 26, // headline-lg
+            fontSize: 26,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -166,26 +166,21 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
     final jadwalPelayanan = data['jadwalPelayanan'] as String? ?? '';
     final infoPenting = data['infoPenting'] as String? ?? '';
 
-    // 1. Parsing Jadwal Pelayanan
     List<String> jadwalList = jadwalPelayanan
-        .replaceAll('\\n', '\n') // Membaca ketikan \n manual dari Prisma
-        .split(RegExp(r'\n|\r\n')) // Membaca tombol Enter dari Mac/Windows
+        .replaceAll('\\n', '\n')
+        .split(RegExp(r'\n|\r\n'))
         .where((s) => s.trim().isNotEmpty)
         .toList();
 
-    // 2. Parsing Informasi Penting
     List<String> infoList = infoPenting
-        .replaceAll('\\n', '\n') // Membaca ketikan \n manual dari Prisma
-        .split(RegExp(r'\n|\r\n')) // Membaca tombol Enter dari Mac/Windows
+        .replaceAll('\\n', '\n')
+        .split(RegExp(r'\n|\r\n'))
         .where((s) => s.trim().isNotEmpty)
         .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // --- BAGIAN KHOTBAH YANG BARU ---
-
-        // Judul Khotbah dan Ayat (Bold)
         Text(
           '"$khotbahJudul" ($khotbahAyat)',
           style: const TextStyle(
@@ -198,7 +193,6 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
         ),
         const SizedBox(height: 12),
 
-        // Isi/Deskripsi Khotbah (Regular)
         Text(
           khotbahIsi,
           style: const TextStyle(
@@ -210,7 +204,6 @@ class _WartaJemaatScreenState extends State<WartaJemaatScreen> {
         ),
         const SizedBox(height: 24),
 
-        // --------------------------------
         _buildSectionHeader('Jadwal Pelayanan'),
         const SizedBox(height: 12),
         if (jadwalList.isEmpty)

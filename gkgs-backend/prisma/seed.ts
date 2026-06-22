@@ -4,7 +4,6 @@ const prisma = new PrismaClient()
 
 async function main() {
     console.log('Membersihkan data lama...')
-    // Hapus data dari tabel yang memiliki relasi (Foreign Key) terlebih dahulu
     await prisma.attendance.deleteMany()
     await prisma.communityPost.deleteMany()
     await prisma.user.deleteMany()
@@ -19,7 +18,7 @@ async function main() {
         data: {
             name: 'Budi Santoso',
             email: 'budi@example.com',
-            password: 'hashed_password_here', // Di sistem nyata, gunakan bcrypt
+            password: 'hashed_password_here',
             dob: new Date('1990-01-01'),
             gender: 'L',
             phone: '081234567890',
@@ -36,7 +35,7 @@ async function main() {
         },
     })
 
-    // 2. Buat Data Warta Jemaat (Sesuai dengan kebutuhan format UI Anda)
+    // 2. Buat Data Warta Jemaat
     await prisma.warta.create({
         data: {
             judul: 'Warta Jemaat Minggu Ke-5 Mei',
@@ -49,7 +48,7 @@ async function main() {
         },
     })
 
-    // 3. Buat Data Event (Untuk tes Smart QR)
+    // 3. Buat Data Event (Smart QR)
     const ibadahRaya = await prisma.event.create({
         data: {
             title: 'Ibadah Raya Minggu',

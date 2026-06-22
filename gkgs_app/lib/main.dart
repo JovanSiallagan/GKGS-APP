@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // <-- Import SharedPreferences
+import 'package:shared_preferences/shared_preferences.dart';
 
-// Import semua screen yang sudah kita buat
 import 'screens/dashboard_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
@@ -20,33 +19,27 @@ import 'screens/warta_jemaat_screen.dart';
 import 'screens/main_shell.dart';
 
 void main() async {
-  // 1. Wajib ditambahkan agar Flutter bisa menjalankan kode async sebelum UI muncul
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 2. Cek token di SharedPreferences
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('jwt_token');
 
-  // 3. Tentukan rute awal: Jika ada token langsung ke dashboard, jika tidak ke login
   final String initialRoute = (token != null && token.isNotEmpty)
       ? '/dashboard'
       : '/login';
 
-  // 4. Jalankan aplikasi dengan rute awal tersebut
   runApp(GKGSApp(initialRoute: initialRoute));
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class GKGSApp extends StatelessWidget {
-  final String initialRoute; // <-- Menerima rute awal dari main()
+  final String initialRoute;
 
   const GKGSApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
-    // Pindahkan inisialisasi GoRouter ke dalam build
-    // agar bisa menggunakan variabel initialRoute
     final GoRouter router = GoRouter(
       initialLocation: initialRoute,
       navigatorKey: _rootNavigatorKey,
@@ -59,20 +52,17 @@ class GKGSApp extends StatelessWidget {
           path: '/register',
           builder: (context, state) => const RegisterScreen(),
         ),
-        // Sub-pages yang full screen, tanpa shell
         GoRoute(
           path: '/smart_qr',
           builder: (context, state) => const SmartQrScreen(),
         ),
         GoRoute(
-          path: '/check_in_success', // <-- Pastikan namanya persis seperti ini
+          path: '/check_in_success',
           builder: (context, state) {
-            // Menangkap data 'extra' yang dilempar dari halaman sebelumnya
             final Map<String, dynamic> data =
                 state.extra as Map<String, dynamic>? ?? {};
 
             return CheckInSuccessScreen(
-              // Jika tidak ada data yang dikirim, gunakan nilai default
               judulAcara: data['title'] ?? 'Ibadah',
               keterangan: data['description'] ?? 'Ibadah Minggu',
               tanggalAcara: data['date'] ?? DateTime.now().toString(),

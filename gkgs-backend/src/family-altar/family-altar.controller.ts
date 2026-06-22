@@ -10,7 +10,6 @@ export class FamilyAltarController {
     return this.familyAltarService.findAll();
   }
 
-  // Endpoint sementara untuk isi data (Nanti bisa dilindungi JWT khusus Admin)
   @Post()
   create(@Body() data: any) {
     return this.familyAltarService.create(data);

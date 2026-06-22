@@ -37,7 +37,6 @@ export class UserService {
     return user;
   }
 
-  // --- MENGAMBIL PROFIL LENGKAP ---
   async getUserById(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
@@ -45,18 +44,14 @@ export class UserService {
         id: true,
         name: true,
         email: true,
-        dob: true,      // Tampilkan Tanggal Lahir
-        gender: true,   // Tampilkan Jenis Kelamin
-        address: true,  // Tampilkan Alamat
-        phone: true,    // Tampilkan Nomor Telepon
-        // Password tetap disembunyikan
+        dob: true,      
+        gender: true,  
+        address: true,  
+        phone: true,   
       }
     });
   }
-
-  // --- MENYIMPAN PERUBAHAN PROFIL ---
   async updateProfile(userId: string, data: any) {
-    // Jika ada tanggal lahir, pastikan formatnya diubah menjadi Date agar diterima Prisma
     if (data.dob) {
       data.dob = new Date(data.dob);
     }
@@ -70,7 +65,6 @@ export class UserService {
         address: data.address,
         phone: data.phone,
       },
-      // Kembalikan data terbaru setelah diupdate
       select: {
         id: true,
         name: true,

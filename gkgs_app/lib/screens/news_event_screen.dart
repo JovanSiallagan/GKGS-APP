@@ -23,7 +23,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF), // background
+      backgroundColor: const Color(0xFFF8F9FF),
       appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
@@ -34,12 +34,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
             const SizedBox(height: 40),
             _buildFeaturedNews(),
             const SizedBox(height: 40),
-            /*
-            _buildUpcomingEvents(),
-            const SizedBox(height: 40),
-            _buildNewsFeed(),
-            */
-            const SizedBox(height: 32), // Padding aman bawah
+            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -47,14 +42,12 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
   }
 
   // --- WIDGET COMPONENTS ---
-
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xFFF8F9FF).withOpacity(0.95),
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
-      // Mengubah ikon gereja menjadi tombol Back (karena ini halaman sub-menu)
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Color(0xFF0B1C30)),
         onPressed: () => context.pop(),
@@ -68,17 +61,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
           color: Colors.black,
         ),
       ),
-      actions: [
-        /*
-        IconButton(
-          icon: const Icon(
-            Icons.notifications_outlined,
-            color: Color(0xFF0B1C30),
-          ),
-          onPressed: () {},
-        ),
-        */
-      ],
+      actions: [],
     );
   }
 
@@ -92,7 +75,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
             fontFamily: 'Montserrat',
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF0B1C30), // on-surface
+            color: Color(0xFF0B1C30),
           ),
         ),
         SizedBox(height: 8),
@@ -101,7 +84,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
       ],
@@ -155,7 +138,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Gambar Header
                   Stack(
                     children: [
                       ClipRRect(
@@ -171,7 +153,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      // Badge Label
                       Positioned(
                         top: 16,
                         left: 16,
@@ -183,7 +164,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                           decoration: BoxDecoration(
                             color: const Color(
                               0xFF131B2E,
-                            ).withOpacity(0.9), // primary-container
+                            ).withOpacity(0.9),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: const Text(
@@ -199,7 +180,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                       ),
                     ],
                   ),
-                  // Deskripsi Sorotan
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -211,7 +191,7 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                             fontFamily: 'Inter',
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black, // primary
+                            color: Colors.black,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -315,7 +295,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
           ],
         ),
         const SizedBox(height: 16),
-        // Horizontal Scroll untuk Acara
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           clipBehavior: Clip.none,
@@ -390,12 +369,11 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Kotak Tanggal
               Container(
                 width: 60,
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD3E4FE), // surface-variant
+                  color: const Color(0xFFD3E4FE),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
@@ -422,7 +400,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                 ),
               ),
               const SizedBox(width: 16),
-              // Judul Acara
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,7 +442,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          // Info Lokasi / Waktu
           Row(
             children: [
               Icon(infoIcon, size: 16, color: const Color(0xFF45464D)),
@@ -520,7 +496,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
           icon: Icons.music_note,
         ),
         const SizedBox(height: 24),
-        // Tombol Muat Lebih Banyak
         OutlinedButton(
           onPressed: () {},
           style: OutlinedButton.styleFrom(
@@ -563,7 +538,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Gambar atau Icon
           Container(
             width: 96,
             height: 96,
@@ -582,7 +556,6 @@ class _NewsEventScreenState extends State<NewsEventScreen> {
                 : null,
           ),
           const SizedBox(width: 16),
-          // Teks
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

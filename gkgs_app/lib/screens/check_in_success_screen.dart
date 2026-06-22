@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 
 class CheckInSuccessScreen extends StatefulWidget {
-  // 1. TAMBAHKAN PARAMETER PENERIMA DATA DI SINI
   final String keterangan;
   final String tanggalAcara;
   final String judulAcara;
@@ -51,7 +50,6 @@ class _CheckInSuccessScreenState extends State<CheckInSuccessScreen> {
     }
   }
 
-  // Fungsi untuk memformat tanggal (Jika format dari DB berupa ISO '2026-05-30')
   String _formatDate(String isoDate) {
     try {
       final date = DateTime.parse(isoDate);
@@ -71,7 +69,7 @@ class _CheckInSuccessScreenState extends State<CheckInSuccessScreen> {
       ];
       return '${date.day} ${months[date.month - 1]} ${date.year}';
     } catch (e) {
-      return isoDate; // Kembalikan teks asli jika bukan format ISO
+      return isoDate;
     }
   }
 
@@ -143,17 +141,7 @@ class _CheckInSuccessScreenState extends State<CheckInSuccessScreen> {
           color: Colors.black,
         ),
       ),
-      actions: [
-        /*
-        IconButton(
-          icon: const Icon(
-            Icons.notifications_outlined,
-            color: Color(0xFF45464D),
-          ),
-          onPressed: () {},
-        ),
-        */
-      ],
+      actions: [],
     );
   }
 
@@ -233,14 +221,12 @@ class _CheckInSuccessScreenState extends State<CheckInSuccessScreen> {
           _buildDetailRow(label: 'Judul', value: widget.judulAcara),
           const Divider(color: Color(0xFFE0E3E5), height: 24),
 
-          // 2. TAMPILKAN TANGGAL DARI WIDGET
           _buildDetailRow(
             label: 'Tanggal',
             value: _formatDate(widget.tanggalAcara),
           ),
           const Divider(color: Color(0xFFE0E3E5), height: 24),
 
-          // 3. UBAH LABEL JADI "Keterangan" DAN VALUE DARI WIDGET
           _buildDetailRow(label: 'Keterangan', value: widget.keterangan),
         ],
       ),
@@ -261,7 +247,6 @@ class _CheckInSuccessScreenState extends State<CheckInSuccessScreen> {
           ),
         ),
 
-        // Membungkus value dengan Expanded agar teks tidak error jika kepanjangan
         Expanded(
           child: Text(
             value,

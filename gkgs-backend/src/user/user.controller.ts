@@ -12,11 +12,9 @@ export class UserController {
     return this.userService.register(createUserDto);
   }
 
-  // Endpoint untuk mengambil profil
   @UseGuards(AuthGuard('jwt'))
   @Get('me')
   getProfile(@Req() req) {
-    // KITA TAMBAHKAN req.user?.userId DI SINI
     const userId = req.user?.userId || req.user?.id || req.user?.sub; 
     
     if (!userId) {
@@ -26,11 +24,9 @@ export class UserController {
     return this.userService.getUserById(userId);
   }
 
-  // Endpoint untuk mengubah profil
   @UseGuards(AuthGuard('jwt'))
   @Patch('me')
   updateProfile(@Req() req, @Body() updateData: any) {
-    // KITA TAMBAHKAN req.user?.userId DI SINI
     const userId = req.user?.userId || req.user?.id || req.user?.sub;
     
     if (!userId) {

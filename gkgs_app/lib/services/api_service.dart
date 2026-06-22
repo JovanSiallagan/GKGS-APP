@@ -5,11 +5,9 @@ import '../models/family_altar.dart';
 import '../models/community_post.dart';
 
 class ApiService {
-  // Ganti IP jika pakai Emulator Android (10.0.2.2) atau HP fisik (IP WiFi Laptop)
   static const String baseUrl = 'https://gkgs-app.vercel.app';
 
   // --- AUTENTIKASI ---
-
   Future<bool> register(String name, String email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/user/register'),
@@ -17,7 +15,6 @@ class ApiService {
       body: jsonEncode({"name": name, "email": email, "password": password}),
     );
 
-    // Status 201 berarti "Created" (Berhasil dibuat) di NestJS
     return response.statusCode == 201;
   }
 
@@ -32,11 +29,9 @@ class ApiService {
       final data = jsonDecode(response.body);
       final token = data['access_token'];
 
-      // Simpan token ke HP
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt_token', token);
 
-      // Ambil profile dan simpan nama ke cache agar tidak hardcoded
       try {
         final profile = await getUserProfile();
         if (profile != null && profile['name'] != null) {
@@ -52,7 +47,6 @@ class ApiService {
   }
 
   // --- FAMILY ALTAR ---
-
   Future<List<FamilyAltar>> getFamilyAltars() async {
     final response = await http.get(Uri.parse('$baseUrl/family-altar'));
 
@@ -65,8 +59,6 @@ class ApiService {
   }
 
   // --- PAPAN INTERAKSI ---
-
-  // Fungsi untuk Papan Interaksi (Ambil Data)
   Future<List<CommunityPost>> getCommunityPosts() async {
     final response = await http.get(Uri.parse('$baseUrl/community-post'));
 
@@ -78,9 +70,7 @@ class ApiService {
     }
   }
 
-  // Fungsi untuk Papan Interaksi (Kirim Data dengan Token JWT)
   Future<bool> createPost(String content, String type) async {
-    // Ambil token yang tersimpan saat login
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('jwt_token');
 
@@ -94,7 +84,7 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
         "Authorization":
-            "Bearer $token", // <-- Mengirim token agar diverifikasi backend
+            "Bearer $token",
       },
       body: jsonEncode({"content": content, "type": type}),
     );
@@ -103,10 +93,7 @@ class ApiService {
   }
 
   // --- ABSENSI (SMART QR) ---
-
-  // 1. UBAH return type dari Future<bool> menjadi Future<Map<String, dynamic>>
   Future<Map<String, dynamic>> checkIn(String eventId) async {
-    // Ambil token dari HP
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('jwt_token');
 
@@ -114,7 +101,6 @@ class ApiService {
       throw "Token tidak ditemukan, silakan login ulang.";
     }
 
-    // Tembak API NestJS
     final response = await http.post(
       Uri.parse('$baseUrl/attendance/check-in'),
       headers: {
@@ -124,11 +110,9 @@ class ApiService {
       body: jsonEncode({"eventId": eventId}),
     );
 
-    // 2. Jika berhasil (201 atau 200), KEMBALIKAN DATA JSON-NYA!
     if (response.statusCode == 201 || response.statusCode == 200) {
       return jsonDecode(response.body); 
     } else {
-      // Menangkap pesan error dari NestJS (misal: "Anda sudah terdaftar hadir")
       final errorData = jsonDecode(response.body);
       throw errorData['message'] ?? "Gagal melakukan absensi";
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../services/api_service.dart'; // <-- Import ApiService
+import '../services/api_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,9 +12,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-  bool _isLoading = false; // <-- Tambahan efek loading
+  bool _isLoading = false;
 
-  // <-- Tambahkan Controller untuk menangkap teks input
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -32,10 +31,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF), // background
+      backgroundColor: const Color(0xFFF8F9FF),
       body: Stack(
         children: [
-          // Ambient Background Accent (Gradient at the top)
           Positioned(
             top: 0,
             left: 0,
@@ -47,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    const Color(0xFFDCE9FF).withOpacity(0.4), // surface-container-high/40
+                    const Color(0xFFDCE9FF).withOpacity(0.4),
                     Colors.transparent,
                   ],
                 ),
@@ -55,7 +53,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
 
-          // Main Content
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -81,7 +78,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeader() {
     return Column(
       children: [
-        // Brand Icon
         ClipOval(
           child: Image.asset(
             'assets/images/logo_gkgs.jpg',
@@ -92,26 +88,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 24),
         
-        // Brand Name
         const Text(
           'GKGS',
           style: TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 26, // headline-lg-mobile
+            fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.black, // primary
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 8),
         
-        // Subtitle
         const Text(
           'Daftar Akun Baru',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
       ],
@@ -122,14 +116,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FF), // surface
-        borderRadius: BorderRadius.circular(24), // rounded-2xl
+        color: const Color(0xFFF8F9FF),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFFC6C6CD).withOpacity(0.3), // outline-variant/30
+          color: const Color(0xFFC6C6CD).withOpacity(0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04), // shadow-[0_4px_15px_rgba...]
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -139,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildTextField(
-            controller: _nameController, // <-- Pasang controller
+            controller: _nameController,
             label: 'Nama Lengkap',
             hint: 'Masukkan nama lengkap Anda',
             icon: Icons.person_outline,
@@ -148,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 24),
           
           _buildTextField(
-            controller: _emailController, // <-- Pasang controller
+            controller: _emailController,
             label: 'Email',
             hint: 'contoh@email.com',
             icon: Icons.mail_outline,
@@ -157,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 24),
           
           _buildPasswordField(
-            controller: _passwordController, // <-- Pasang controller
+            controller: _passwordController,
             label: 'Kata Sandi',
             hint: 'Minimal 8 karakter',
             icon: Icons.lock_outline,
@@ -171,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 24),
           
           _buildPasswordField(
-            controller: _confirmPasswordController, // <-- Pasang controller
+            controller: _confirmPasswordController,
             label: 'Konfirmasi Kata Sandi',
             hint: 'Ulangi kata sandi',
             icon: Icons.lock_reset_outlined,
@@ -184,16 +178,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           const SizedBox(height: 32),
 
-          // Primary Action Button
           ElevatedButton(
             onPressed: _isLoading ? null : () async {
-              // 1. Validasi Input Dasar
               if (_nameController.text.isEmpty || _emailController.text.isEmpty || _passwordController.text.isEmpty) {
                 _showError("Semua kolom harus diisi!");
                 return;
               }
 
-              // 2. Validasi Kata Sandi
               if (_passwordController.text.length < 8) {
                 _showError("Kata sandi minimal 8 karakter!");
                 return;
@@ -203,7 +194,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 return;
               }
 
-              // 3. Tembak API Register
               setState(() { _isLoading = true; });
               
               ApiService api = ApiService();
@@ -215,7 +205,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               setState(() { _isLoading = false; });
 
-              // 4. Cek Hasil
               if (isSuccess && context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -223,17 +212,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: Colors.green,
                   ),
                 );
-                context.pop(); // Kembali ke halaman Login
+                context.pop();
               } else if (context.mounted) {
                 _showError("Pendaftaran gagal! Email mungkin sudah digunakan.");
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, // primary
-              foregroundColor: Colors.white, // on-primary
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // rounded-xl
+                borderRadius: BorderRadius.circular(12),
               ),
               elevation: 2,
             ),
@@ -249,7 +238,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'Daftar Sekarang',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 14, // label-md
+                        fontSize: 14,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.1,
                       ),
@@ -264,16 +253,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Fungsi pembantu untuk menampilkan pesan error
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
-  // Reusable TextField builder untuk Nama Lengkap dan Email
   Widget _buildTextField({
-    required TextEditingController controller, // <-- Tambahan
+    required TextEditingController controller,
     required String label,
     required String hint,
     required IconData icon,
@@ -288,22 +275,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             fontFamily: 'Inter',
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF0B1C30), // on-surface
+            color: Color(0xFF0B1C30),
           ),
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: controller, // <-- Dipasang
+          controller: controller,
           keyboardType: keyboardType,
           style: const TextStyle(fontFamily: 'Inter', fontSize: 16),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(
-              color: Color(0xFFC6C6CD), // placeholder:text-outline-variant
+              color: Color(0xFFC6C6CD),
             ),
-            prefixIcon: Icon(icon, color: const Color(0xFF76777D)), // text-outline
+            prefixIcon: Icon(icon, color: const Color(0xFF76777D)),
             filled: true,
-            fillColor: const Color(0xFFEFF4FF), // surface-container-low
+            fillColor: const Color(0xFFEFF4FF),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -319,9 +306,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Reusable TextField builder khusus untuk Password
   Widget _buildPasswordField({
-    required TextEditingController controller, // <-- Tambahan
+    required TextEditingController controller,
     required String label,
     required String hint,
     required IconData icon,
@@ -342,7 +328,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: controller, // <-- Dipasang
+          controller: controller,
           obscureText: !isVisible,
           style: const TextStyle(fontFamily: 'Inter', fontSize: 16),
           decoration: InputDecoration(
@@ -384,7 +370,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
         TextButton(

@@ -14,11 +14,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoading = true;
   bool _isSaving = false;
 
-  String _displayName = 'Memuat...'; // Variabel khusus untuk nama di atas
+  String _displayName = 'Memuat...';
   String _selectedGender = 'L';
   DateTime? _dob;
 
-  // Controller untuk menangkap dan menampilkan data di kolom
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -27,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _loadProfileData(); // Logika GET dijalankan otomatis saat halaman dibuka
+    _loadProfileData();
   }
 
   @override
@@ -39,16 +38,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  // --- LOGIKA GET DATA DARI BACKEND ---
   Future<void> _loadProfileData() async {
     ApiService api = ApiService();
     final user = await api.getUserProfile();
 
     if (user != null && mounted) {
       setState(() {
-        // Memasukkan data dari database ke kolom-kolom
         _nameController.text = user['name'] ?? '';
-        _displayName = user['name'] ?? 'Jemaat'; // Mengubah teks paling atas
+        _displayName = user['name'] ?? 'Jemaat';
         _emailController.text = user['email'] ?? '';
         _addressController.text = user['address'] ?? '';
         _phoneController.text = user['phone'] ?? '';
@@ -61,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (user['dob'] != null) {
           _dob = DateTime.tryParse(user['dob'].toString());
         }
-        _isLoading = false; // Matikan loading
+        _isLoading = false;
       });
     } else {
       if (mounted) {
@@ -73,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // --- LOGIKA MENYIMPAN (PATCH) DATA ---
   Future<void> _saveProfile() async {
     setState(() {
       _isSaving = true;
@@ -100,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (isSuccess && mounted) {
       setState(() {
         _displayName =
-            _nameController.text; // Update teks di atas setelah disave
+            _nameController.text;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -142,25 +138,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // --- WIDGET COMPONENTS ---
-
   Widget _buildProfileHeader() {
     return Column(
       children: [
-        // FOTO PROFIL DIHAPUS
 
-        // Nama Asli Akun (Ditarik dari Backend)
         Text(
           _displayName,
           style: const TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 26, // Ukuran dibesarkan sedikit karena tidak ada foto
+            fontSize: 26,
             fontWeight: FontWeight.bold,
             color: Color(0xFF0B1C30),
           ),
         ),
         const SizedBox(height: 8),
 
-        // Badge
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(

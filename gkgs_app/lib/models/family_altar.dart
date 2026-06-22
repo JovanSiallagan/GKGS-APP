@@ -15,7 +15,6 @@ class FamilyAltar {
     required this.content,
   });
 
-  // Fungsi untuk mengubah JSON dari NestJS menjadi Object Flutter
   factory FamilyAltar.fromJson(Map<String, dynamic> json) {
     return FamilyAltar(
       id: json['id'],

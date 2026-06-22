@@ -10,21 +10,16 @@ class BibleReaderScreen extends StatefulWidget {
 }
 
 class _BibleReaderScreenState extends State<BibleReaderScreen> {
-  // State untuk data Alkitab
   List<BibleBook> _books = [];
   bool _isLoading = true;
 
-  // State untuk pilihan user
   BibleBook? _selectedBook;
   BibleChapter? _selectedChapter;
 
-  // State untuk pemisah Perjanjian Lama / Perjanjian Baru
   bool _isPerjanjianBaru = false;
 
-  // Controller untuk search bar
   final TextEditingController _searchController = TextEditingController();
 
-  // ScrollController untuk auto-scroll ke atas saat pindah pasal
   final ScrollController _scrollController = ScrollController();
 
   /// Daftar kitab yang difilter berdasarkan perjanjian yang dipilih
@@ -35,7 +30,7 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       // Perjanjian Baru: indeks 39 sampai akhir
       return _books.sublist(39 < _books.length ? 39 : _books.length);
     } else {
-      // Perjanjian Lama: indeks 0 sampai 38 (inklusif)
+      // Perjanjian Lama: indeks 0 sampai 38
       return _books.sublist(0, 39 < _books.length ? 39 : _books.length);
     }
   }
@@ -58,7 +53,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
     if (mounted) {
       setState(() {
         _books = books;
-        // Default ke kitab pertama, pasal pertama
         if (books.isNotEmpty) {
           _selectedBook = books[0];
           if (books[0].chapters.isNotEmpty) {
@@ -70,12 +64,10 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
     }
   }
 
-  /// Mencari kitab berdasarkan nama yang diketik user
   void _searchBook(String query) {
     if (query.trim().isEmpty) return;
 
     final lowerQuery = query.trim().toLowerCase();
-    // Cari kitab yang namanya mengandung kata kunci
     final found = _books.cast<BibleBook?>().firstWhere(
       (book) => book!.name.toLowerCase().contains(lowerQuery),
       orElse: () => null,
@@ -85,14 +77,14 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       final bookIndex = _books.indexOf(found);
       setState(() {
         _selectedBook = found;
-        _selectedChapter = found.chapters.isNotEmpty ? found.chapters.first : null;
-        // Sinkronkan tab PL/PB berdasarkan indeks kitab
+        _selectedChapter = found.chapters.isNotEmpty
+            ? found.chapters.first
+            : null;
         _isPerjanjianBaru = bookIndex >= 39;
       });
       _searchController.clear();
       _scrollToTop();
     } else {
-      // Tidak ditemukan, tampilkan snackbar
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -109,7 +101,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
     }
   }
 
-  /// Pindah ke pasal sebelumnya
   void _goToPreviousChapter() {
     if (_selectedBook == null || _selectedChapter == null) return;
 
@@ -120,7 +111,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       });
       _scrollToTop();
     } else {
-      // Pindah ke kitab sebelumnya, pasal terakhir
       final bookIndex = _books.indexOf(_selectedBook!);
       if (bookIndex > 0) {
         final prevBook = _books[bookIndex - 1];
@@ -129,7 +119,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
           _selectedChapter = prevBook.chapters.isNotEmpty
               ? prevBook.chapters.last
               : null;
-          // Sinkronkan tab PL/PB
           _isPerjanjianBaru = (bookIndex - 1) >= 39;
         });
         _scrollToTop();
@@ -137,7 +126,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
     }
   }
 
-  /// Pindah ke pasal selanjutnya
   void _goToNextChapter() {
     if (_selectedBook == null || _selectedChapter == null) return;
 
@@ -148,7 +136,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       });
       _scrollToTop();
     } else {
-      // Pindah ke kitab selanjutnya, pasal pertama
       final bookIndex = _books.indexOf(_selectedBook!);
       if (bookIndex < _books.length - 1) {
         final nextBook = _books[bookIndex + 1];
@@ -157,7 +144,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
           _selectedChapter = nextBook.chapters.isNotEmpty
               ? nextBook.chapters.first
               : null;
-          // Sinkronkan tab PL/PB
           _isPerjanjianBaru = (bookIndex + 1) >= 39;
         });
         _scrollToTop();
@@ -177,7 +163,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Tampilkan loading saat data masih dimuat
     if (_isLoading) {
       return const Center(
         child: Column(
@@ -215,19 +200,18 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
           _buildVersesList(),
           const SizedBox(height: 32),
           _buildPagination(),
-          const SizedBox(height: 32), // Safe area bottom
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
   // --- WIDGET COMPONENTS ---
-
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF4FF), // surface-container-low
-        borderRadius: BorderRadius.circular(999), // rounded-full
+        color: const Color(0xFFEFF4FF),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: TextField(
         controller: _searchController,
@@ -236,7 +220,7 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
         onSubmitted: _searchBook,
         decoration: InputDecoration(
           hintText: 'Cari nama kitab (misal: Yohanes)...',
-          hintStyle: const TextStyle(color: Color(0xFF76777D)), // outline
+          hintStyle: const TextStyle(color: Color(0xFF76777D)),
           prefixIcon: const Icon(Icons.search, color: Color(0xFF76777D)),
           suffixIcon: IconButton(
             icon: const Icon(Icons.send, color: Colors.blue),
@@ -245,61 +229,73 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
             },
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 14,
+          ),
         ),
       ),
     );
   }
 
-  /// Tab pemilih Perjanjian Lama / Perjanjian Baru
   Widget _buildTestamentSelector() {
     return Container(
       height: 44,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF4FF), // surface-container-low
+        color: const Color(0xFFEFF4FF),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          _buildTestamentTab(title: 'Perjanjian Lama', isSelected: !_isPerjanjianBaru, onTap: () {
-            if (_isPerjanjianBaru) {
-              setState(() {
-                _isPerjanjianBaru = false;
-                // Reset ke kitab pertama PL
-                final plBooks = _filteredBooks;
-                if (plBooks.isNotEmpty) {
-                  _selectedBook = plBooks.first;
-                  _selectedChapter = plBooks.first.chapters.isNotEmpty
-                      ? plBooks.first.chapters.first
-                      : null;
-                }
-              });
-              _scrollToTop();
-            }
-          }),
-          _buildTestamentTab(title: 'Perjanjian Baru', isSelected: _isPerjanjianBaru, onTap: () {
-            if (!_isPerjanjianBaru) {
-              setState(() {
-                _isPerjanjianBaru = true;
-                // Reset ke kitab pertama PB
-                final pbBooks = _filteredBooks;
-                if (pbBooks.isNotEmpty) {
-                  _selectedBook = pbBooks.first;
-                  _selectedChapter = pbBooks.first.chapters.isNotEmpty
-                      ? pbBooks.first.chapters.first
-                      : null;
-                }
-              });
-              _scrollToTop();
-            }
-          }),
+          _buildTestamentTab(
+            title: 'Perjanjian Lama',
+            isSelected: !_isPerjanjianBaru,
+            onTap: () {
+              if (_isPerjanjianBaru) {
+                setState(() {
+                  _isPerjanjianBaru = false;
+                  final plBooks = _filteredBooks;
+                  if (plBooks.isNotEmpty) {
+                    _selectedBook = plBooks.first;
+                    _selectedChapter = plBooks.first.chapters.isNotEmpty
+                        ? plBooks.first.chapters.first
+                        : null;
+                  }
+                });
+                _scrollToTop();
+              }
+            },
+          ),
+          _buildTestamentTab(
+            title: 'Perjanjian Baru',
+            isSelected: _isPerjanjianBaru,
+            onTap: () {
+              if (!_isPerjanjianBaru) {
+                setState(() {
+                  _isPerjanjianBaru = true;
+                  final pbBooks = _filteredBooks;
+                  if (pbBooks.isNotEmpty) {
+                    _selectedBook = pbBooks.first;
+                    _selectedChapter = pbBooks.first.chapters.isNotEmpty
+                        ? pbBooks.first.chapters.first
+                        : null;
+                  }
+                });
+                _scrollToTop();
+              }
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTestamentTab({required String title, required bool isSelected, required VoidCallback onTap}) {
+  Widget _buildTestamentTab({
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -335,11 +331,9 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
     );
   }
 
-  /// Dropdown untuk memilih Kitab dan Pasal
   Widget _buildDropdowns() {
     return Row(
       children: [
-        // Dropdown Kitab
         Expanded(
           flex: 3,
           child: Container(
@@ -355,7 +349,10 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
               child: DropdownButton<BibleBook>(
                 value: _selectedBook,
                 isExpanded: true,
-                icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF45464D)),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Color(0xFF45464D),
+                ),
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 15,
@@ -386,7 +383,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
           ),
         ),
         const SizedBox(width: 12),
-        // Dropdown Pasal
         Expanded(
           flex: 2,
           child: Container(
@@ -402,7 +398,10 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
               child: DropdownButton<BibleChapter>(
                 value: _selectedChapter,
                 isExpanded: true,
-                icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF45464D)),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Color(0xFF45464D),
+                ),
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 15,
@@ -444,9 +443,9 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
           '$bookName $chapterNum',
           style: const TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 32, // headline-lg
+            fontSize: 32,
             fontWeight: FontWeight.bold,
-            color: Colors.black, // primary
+            color: Colors.black,
           ),
         ),
         const SizedBox(height: 12),
@@ -458,7 +457,7 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
               'TB (Terjemahan Baru)',
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14, // label-md
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF7C839B),
               ),
@@ -503,36 +502,34 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
 
   Widget _buildVerseItem(String verseNumber, String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0), // gap-6
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Nomor Ayat
           SizedBox(
-            width: 40, // shrink-0 w-8 + extra padding
+            width: 40,
             child: Padding(
               padding: const EdgeInsets.only(top: 2.0),
               child: Text(
                 verseNumber,
                 style: const TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 14, // label-md
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black, // primary
+                  color: Colors.black,
                 ),
               ),
             ),
           ),
-          // Teks Ayat (Menggunakan body-lg agar lebih nyaman dibaca)
           Expanded(
             child: Text(
               text,
               style: const TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 18, // body-lg
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
-                color: Color(0xFF0B1C30), // on-surface
-                height: 1.6, // leading-relaxed
+                color: Color(0xFF0B1C30), 
+                height: 1.6,
               ),
             ),
           ),
@@ -542,7 +539,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
   }
 
   Widget _buildPagination() {
-    // Cek apakah bisa mundur (ada pasal/kitab sebelumnya)
     final bool canGoPrev;
     if (_selectedBook == null || _selectedChapter == null) {
       canGoPrev = false;
@@ -552,14 +548,14 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       canGoPrev = chapterIndex > 0 || bookIndex > 0;
     }
 
-    // Cek apakah bisa maju (ada pasal/kitab selanjutnya)
     final bool canGoNext;
     if (_selectedBook == null || _selectedChapter == null) {
       canGoNext = false;
     } else {
       final chapterIndex = _selectedBook!.chapters.indexOf(_selectedChapter!);
       final bookIndex = _books.indexOf(_selectedBook!);
-      canGoNext = chapterIndex < _selectedBook!.chapters.length - 1 ||
+      canGoNext =
+          chapterIndex < _selectedBook!.chapters.length - 1 ||
           bookIndex < _books.length - 1;
     }
 
@@ -573,7 +569,6 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Tombol Sebelumnya
           TextButton(
             onPressed: canGoPrev ? _goToPreviousChapter : null,
             style: TextButton.styleFrom(
@@ -582,8 +577,13 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
             ),
             child: Row(
               children: [
-                Icon(Icons.chevron_left, size: 20,
-                    color: canGoPrev ? const Color(0xFF45464D) : const Color(0xFFC6C6CD)),
+                Icon(
+                  Icons.chevron_left,
+                  size: 20,
+                  color: canGoPrev
+                      ? const Color(0xFF45464D)
+                      : const Color(0xFFC6C6CD),
+                ),
                 const SizedBox(width: 4),
                 Text(
                   'Sebelumnya',
@@ -591,13 +591,14 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
                     fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: canGoPrev ? const Color(0xFF45464D) : const Color(0xFFC6C6CD),
+                    color: canGoPrev
+                        ? const Color(0xFF45464D)
+                        : const Color(0xFFC6C6CD),
                   ),
                 ),
               ],
             ),
           ),
-          // Tombol Selanjutnya
           TextButton(
             onPressed: canGoNext ? _goToNextChapter : null,
             style: TextButton.styleFrom(
@@ -612,12 +613,19 @@ class _BibleReaderScreenState extends State<BibleReaderScreen> {
                     fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: canGoNext ? const Color(0xFF45464D) : const Color(0xFFC6C6CD),
+                    color: canGoNext
+                        ? const Color(0xFF45464D)
+                        : const Color(0xFFC6C6CD),
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(Icons.chevron_right, size: 20,
-                    color: canGoNext ? const Color(0xFF45464D) : const Color(0xFFC6C6CD)),
+                Icon(
+                  Icons.chevron_right,
+                  size: 20,
+                  color: canGoNext
+                      ? const Color(0xFF45464D)
+                      : const Color(0xFFC6C6CD),
+                ),
               ],
             ),
           ),

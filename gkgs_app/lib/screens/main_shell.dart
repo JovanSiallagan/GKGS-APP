@@ -8,7 +8,6 @@ class MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Reset Route: Pengecekan jika currentIndex di luar batas (stuck di state lama)
     if (navigationShell.currentIndex >= 4) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/dashboard');
@@ -20,11 +19,10 @@ class MainShell extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF), // background
+      backgroundColor: const Color(0xFFF8F9FF), 
       appBar: _buildAppBar(context),
       body: navigationShell,
 
-      // Floating Action Button — Scan QR di tengah
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/smart_qr'),
         backgroundColor: Colors.black,
@@ -72,14 +70,7 @@ class MainShell extends StatelessWidget {
           color: Colors.black,
         ),
       ),
-      actions: [
-        /*
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined, color: Color(0xFF0B1C30)),
-          onPressed: () {},
-        ),
-        */
-      ],
+      actions: [],
     );
   }
 
@@ -87,14 +78,13 @@ class MainShell extends StatelessWidget {
     return BottomAppBar(
       color: Colors.white,
       elevation: 8,
-      notchMargin: 10.0, // Sedikit diperbesar agar FAB punya ruang
+      notchMargin: 10.0,
       shape: const CircularNotchedRectangle(),
       padding: EdgeInsets.zero,
       child: SizedBox(
         height: 65,
         child: Row(
           children: [
-            // Sisi Kiri (Porsi 50% dari sisa ruang)
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,10 +107,8 @@ class MainShell extends StatelessWidget {
               ),
             ),
 
-            // Jarak Tengah (Untuk FAB)
             const SizedBox(width: 70),
 
-            // Sisi Kanan (Porsi 50% dari sisa ruang)
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,7 +151,7 @@ class MainShell extends StatelessWidget {
         }
       },
       child: SizedBox(
-        width: 60, // Berikan lebar tetap agar keempat tombol ukurannya sama
+        width: 60,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -194,8 +182,6 @@ class MainShell extends StatelessWidget {
   }
 }
 
-/// Custom lokasi FAB untuk mendorong tombol sedikit ke bawah
-/// agar sejajar sempurna secara horizontal dengan ikon navigasi
 class _CustomFabLocation extends FloatingActionButtonLocation {
   final FloatingActionButtonLocation location;
   final double offsetY;

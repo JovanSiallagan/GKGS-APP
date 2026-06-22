@@ -25,10 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FF), // surface
+      backgroundColor: const Color(0xFFF8F9FF),
       body: Stack(
         children: [
-          // Ambient Background Gradients
           Positioned(
             top: -100,
             right: -100,
@@ -59,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   colors: [
                     const Color(
                       0xFFEFF4FF,
-                    ).withOpacity(0.8), // surface-container-low
+                    ).withOpacity(0.8),
                     Colors.transparent,
                   ],
                 ),
@@ -67,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Main Content
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -93,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeader() {
     return Column(
       children: [
-        // Brand Icon
         ClipOval(
           child: Image.asset(
             'assets/images/logo_gkgs.jpg',
@@ -104,27 +101,25 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 8),
 
-        // Brand Name
         const Text(
           'GKGS',
           style: TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 24, // headline-md
+            fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.black, // primary
+            color: Colors.black,
             letterSpacing: -0.5,
           ),
         ),
         const SizedBox(height: 16),
 
-        // Welcome Message
         const Text(
           'Selamat Datang',
           style: TextStyle(
             fontFamily: 'Montserrat',
-            fontSize: 26, // headline-lg-mobile
+            fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF0B1C30), // on-surface
+            color: Color(0xFF0B1C30),
           ),
         ),
         const SizedBox(height: 4),
@@ -134,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
       ],
@@ -145,7 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Email Input
         const Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
@@ -154,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fontFamily: 'Inter',
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF45464D), // on-surface-variant
+              color: Color(0xFF45464D),
             ),
           ),
         ),
@@ -165,16 +159,16 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: InputDecoration(
             hintText: 'jemaat@gkgs.org',
             hintStyle: TextStyle(
-              color: const Color(0xFF76777D).withOpacity(0.6), // outline/60
+              color: const Color(0xFF76777D).withOpacity(0.6),
             ),
             prefixIcon: const Icon(
               Icons.mail_outline,
               color: Color(0xFF45464D),
             ),
             filled: true,
-            fillColor: const Color(0xFFE5EEFF), // surface-container
+            fillColor: const Color(0xFFE5EEFF),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16), // rounded-xl
+              borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
@@ -182,14 +176,13 @@ class _LoginScreenState extends State<LoginScreen> {
               borderSide: const BorderSide(
                 color: Colors.black,
                 width: 1.5,
-              ), // focus:border-primary
+              ),
             ),
             contentPadding: const EdgeInsets.symmetric(vertical: 16),
           ),
         ),
         const SizedBox(height: 24),
 
-        // Password Input
         const Padding(
           padding: EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
@@ -241,7 +234,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 16),
 
-        // Submit Button
         ElevatedButton(
           onPressed: _isLoading
               ? null
@@ -251,7 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
 
                   ApiService api = ApiService();
-                  // Panggil API login dengan data dari TextField
                   bool isSuccess = await api.login(
                     _emailController.text,
                     _passwordController.text,
@@ -265,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (context.mounted) {
                       context.go(
                         '/dashboard',
-                      ); // Pindah ke dashboard jika sukses
+                      );
                     }
                   } else {
                     if (context.mounted) {
@@ -281,11 +272,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black, // primary
-            foregroundColor: Colors.white, // on-primary
+            backgroundColor: Colors.black, 
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(999), // rounded-full
+              borderRadius: BorderRadius.circular(999),
             ),
             elevation: 4,
             shadowColor: Colors.black.withOpacity(0.3),
@@ -329,13 +320,13 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
         TextButton(
           onPressed: () {
             context.push('/register');
-          }, // Aksi navigasi ke halaman pendaftaran
+          },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             minimumSize: Size.zero,

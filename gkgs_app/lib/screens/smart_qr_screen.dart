@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile_scanner/mobile_scanner.dart'; // <-- Import Mobile Scanner
-import '../services/api_service.dart'; // <-- Import API Service
+import 'package:mobile_scanner/mobile_scanner.dart';
+import '../services/api_service.dart';
 
 class SmartQrScreen extends StatefulWidget {
   const SmartQrScreen({super.key});
@@ -16,16 +16,13 @@ class _SmartQrScreenState extends State<SmartQrScreen>
   late AnimationController _animationController;
   late Animation<double> _scanAnimation;
 
-  // Controller untuk Kamera
   final MobileScannerController _cameraController = MobileScannerController();
 
-  // Flag agar tidak dobel scan saat sedang loading ke backend
   bool _isProcessing = false;
 
   @override
   void initState() {
     super.initState();
-    // Setup animasi untuk garis scanner (bergerak dari atas ke bawah berulang-ulang)
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -39,38 +36,34 @@ class _SmartQrScreenState extends State<SmartQrScreen>
   @override
   void dispose() {
     _animationController.dispose();
-    _cameraController.dispose(); // <-- Jangan lupa matikan kamera saat keluar
+    _cameraController.dispose();
     super.dispose();
   }
 
-  // --- FUNGSI SAAT QR BERHASIL DIBACA ---
   void _onDetect(BarcodeCapture capture) async {
-    if (_isProcessing) return; // Abaikan jika sedang memproses
+    if (_isProcessing) return;
 
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isNotEmpty) {
       final String? qrData =
-          barcodes.first.rawValue; // Ambil teks dari QR (Event ID)
+          barcodes.first.rawValue;
 
       if (qrData != null && qrData.isNotEmpty) {
         setState(() {
-          _isProcessing = true; // Kunci layar dengan efek loading
+          _isProcessing = true;
         });
 
         try {
           ApiService api = ApiService();
 
-          // 1. TANGKAP RESPONSE SEBAGAI MAP, BUKAN BOOLEAN
           final response = await api.checkIn(qrData);
 
           if (mounted) {
             _cameraController.stop();
 
-            // 2. LEMPAR DATANYA KE ROUTER!
             context.pushReplacement(
               '/check_in_success',
               extra: {
-                // Ambil dari struktur data JSON yang dikirim backend NestJS Anda
                 'title': response['data']['title'],
                 'description': response['data']['description'],
                 'date': response['data']['date'],
@@ -78,9 +71,7 @@ class _SmartQrScreenState extends State<SmartQrScreen>
             );
           }
         } catch (e) {
-          // Jika gagal (ID salah, atau sudah absen)
           if (mounted) {
-            // Bersihkan tulisan "Exception: " bawaan Flutter agar pesan error lebih rapi
             String errorMessage = e.toString().replaceAll('Exception: ', '');
 
             ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +86,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
               ),
             );
 
-            // Beri jeda 3 detik sebelum kamera bisa dipakai scan lagi
             Future.delayed(const Duration(seconds: 3), () {
               if (mounted) {
                 setState(() {
@@ -117,7 +107,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
       appBar: _buildAppBar(context),
       body: Stack(
         children: [
-          // 1. KAMERA ASLI
           Positioned.fill(
             child: MobileScanner(
               controller: _cameraController,
@@ -125,10 +114,8 @@ class _SmartQrScreenState extends State<SmartQrScreen>
             ),
           ),
 
-          // 2. MASKING (Satu Stack dengan Viewfinder)
           Stack(
             children: [
-              // Lapisan Gelap
               Positioned.fill(
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
@@ -143,7 +130,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
                           backgroundBlendMode: BlendMode.dstOut,
                         ),
                       ),
-                      // Lubang di tengah
                       Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -160,7 +146,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
                 ),
               ),
 
-              // 3. Viewfinder & UI (Posisikan di sini agar pas dengan lubang)
               Align(
                 alignment: Alignment.center,
                 child: _buildScannerViewfinderOnly(),
@@ -168,7 +153,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
             ],
           ),
 
-          // 4. Instruksi dan UI lainnya
           SafeArea(
             child: Column(
               children: [
@@ -181,7 +165,7 @@ class _SmartQrScreenState extends State<SmartQrScreen>
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-                const SizedBox(height: 450), // Jarak agar tidak menutupi lubang
+                const SizedBox(height: 450),
                 const Spacer(),
               ],
             ),
@@ -192,10 +176,9 @@ class _SmartQrScreenState extends State<SmartQrScreen>
   }
 
   // --- WIDGET COMPONENTS ---
-
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFFF8F9FF).withOpacity(0.95), // surface/95
+      backgroundColor: const Color(0xFFF8F9FF).withOpacity(0.95),
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
@@ -209,16 +192,14 @@ class _SmartQrScreenState extends State<SmartQrScreen>
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.bold,
           fontSize: 24,
-          color: Colors.black, // primary
+          color: Colors.black,
         ),
       ),
       actions: [
-        // Tombol Flashlight / Senter (Sudah diperbarui untuk versi terbaru)
         ValueListenableBuilder(
           valueListenable:
-              _cameraController, // <-- Sekarang listen langsung ke controllernya
+              _cameraController,
           builder: (context, state, child) {
-            // state di sini menyimpan seluruh informasi kamera, termasuk senter
             if (state.torchState == TorchState.on) {
               return IconButton(
                 icon: const Icon(Icons.flash_on, color: Colors.amber),
@@ -235,7 +216,7 @@ class _SmartQrScreenState extends State<SmartQrScreen>
       ],
       flexibleSpace: ClipRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // backdrop-blur-md
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(color: Colors.transparent),
         ),
       ),
@@ -250,7 +231,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
       height: scannerSize,
       child: Stack(
         children: [
-          // Siku-siku Scanner (Corners) - Tetap butuh ini sebagai bingkai
           Positioned(
             top: 0,
             left: 0,
@@ -272,13 +252,12 @@ class _SmartQrScreenState extends State<SmartQrScreen>
             child: _buildCorner(isTop: false, isLeft: false),
           ),
 
-          // Garis Pemindai (Scan Line) Beranimasi
           AnimatedBuilder(
             animation: _scanAnimation,
             builder: (context, child) {
               return Positioned(
                 top: _scanAnimation.value * (scannerSize - 4),
-                left: 20, // Sedikit margin agar tidak menabrak bingkai
+                left: 20,
                 right: 20,
                 child: Container(
                   height: 3,
@@ -307,7 +286,6 @@ class _SmartQrScreenState extends State<SmartQrScreen>
     );
   }
 
-  // Komponen pembantu untuk membuat sudut (corner) scanner
   Widget _buildCorner({required bool isTop, required bool isLeft}) {
     return Container(
       width: 32,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../services/api_service.dart'; // Pastikan path ini sesuai
-import '../models/family_altar.dart'; // Pastikan path ini sesuai
+import '../services/api_service.dart';
+import '../models/family_altar.dart';
 
 class FamilyAltarScreen extends StatefulWidget {
   const FamilyAltarScreen({super.key});
@@ -16,11 +16,9 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
   @override
   void initState() {
     super.initState();
-    // Memanggil API saat layar pertama kali dibuka
     _futureAltars = ApiService().getFamilyAltars();
   }
 
-  // Fungsi pembantu untuk memformat tanggal (misal: 12 Okt)
   String _formatDate(DateTime date) {
     const months = [
       'Jan',
@@ -65,14 +63,12 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
       body: FutureBuilder<List<FamilyAltar>>(
         future: _futureAltars,
         builder: (context, snapshot) {
-          // Tampilkan loading saat menyedot data
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.black),
             );
           }
 
-          // Jika terjadi error dari API
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -83,7 +79,6 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
             );
           }
 
-          // Jika database kosong
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text(
@@ -95,10 +90,8 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
 
           final List<FamilyAltar> altars = snapshot.data!;
 
-          // Item pertama di database jadikan renungan "Hari Ini"
           final FamilyAltar featuredAltar = altars.first;
 
-          // Sisanya masuk ke renungan sebelumnya
           final List<FamilyAltar> previousAltars = altars.length > 1
               ? altars.sublist(1)
               : [];
@@ -125,7 +118,6 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
   }
 
   // --- WIDGET COMPONENTS ---
-
   Widget _buildHeader() {
     return const Column(
       children: [
@@ -175,7 +167,6 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-            // Membuka halaman detail dan mengirimkan objek renungan
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -340,7 +331,6 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        // Looping data renungan sebelumnya dari database
         ...previousAltars
             .map(
               (altar) => Padding(
@@ -495,10 +485,6 @@ class _FamilyAltarScreenState extends State<FamilyAltarScreen> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// Halaman Detail Renungan (Menerima Data Dinamis)
-// -----------------------------------------------------------------------------
-
 class DevotionalDetailScreen extends StatelessWidget {
   final FamilyAltar devotional;
 
@@ -524,7 +510,6 @@ class DevotionalDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mengecek apakah renungan ini adalah renungan hari ini
     final isToday =
         devotional.date.day == DateTime.now().day &&
         devotional.date.month == DateTime.now().month &&
@@ -560,7 +545,6 @@ class DevotionalDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Badge Tanggal Dinamis
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -579,7 +563,6 @@ class DevotionalDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Judul Dinamis
             Text(
               devotional.title,
               style: const TextStyle(
@@ -592,7 +575,6 @@ class DevotionalDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Highlight Ayat Dinamis
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -638,7 +620,6 @@ class DevotionalDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Konten Renungan Dinamis
             Text(
               devotional.content.replaceAll(r'\n', '\n'),
               style: const TextStyle(

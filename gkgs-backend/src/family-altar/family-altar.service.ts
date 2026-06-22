@@ -7,16 +7,15 @@ export class FamilyAltarService {
 
   async findAll() {
     return this.prisma.familyAltar.findMany({
-      orderBy: { date: 'desc' }, // Urutkan dari tanggal terbaru
+      orderBy: { date: 'desc' },
     });
   }
 
-  // Fungsi tambahan untuk bikin data dummy via Postman
   async create(data: any) {
     return this.prisma.familyAltar.create({
       data: {
         title: data.title,
-        date: new Date(data.date), // Pastikan format tanggal benar
+        date: new Date(data.date),
         description: data.description,
         bibleVerse: data.bibleVerse,
         content: data.content,

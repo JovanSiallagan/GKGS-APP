@@ -26,7 +26,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final apiService = ApiService();
       final warta = await apiService.getLatestWarta();
       if (warta != null) {
-        // Coba ambil tanggal atau created_at
         final String? dateString = warta['tanggal'] ?? warta['created_at'];
         if (dateString != null) {
           final DateTime date = DateTime.parse(dateString);
@@ -43,7 +42,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _loadUserName() async {
-    // 1. Coba ambil dari cache dulu agar cepat
     final prefs = await SharedPreferences.getInstance();
     String? cachedName = prefs.getString('user_name');
     if (cachedName != null && mounted) {
@@ -52,7 +50,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }
 
-    // 2. Fetch data terbaru dari backend
     final apiService = ApiService();
     final profile = await apiService.getUserProfile();
     if (profile != null && profile['name'] != null) {
@@ -77,14 +74,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _buildFeaturedBanner(context),
           const SizedBox(height: 40),
           _buildGridMenu(context),
-          const SizedBox(height: 32), // Safe area bottom spacing
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
   // --- WIDGET COMPONENTS ---
-
   Widget _buildGreeting() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             fontFamily: 'Montserrat',
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF0B1C30), // on-surface
+            color: Color(0xFF0B1C30),
           ),
         ),
         SizedBox(height: 4),
@@ -104,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           style: TextStyle(
             fontFamily: 'Inter',
             fontSize: 16,
-            color: Color(0xFF45464D), // on-surface-variant
+            color: Color(0xFF45464D),
           ),
         ),
       ],
@@ -119,9 +115,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: const Color(0xFFDCE9FF), // surface-container-high
+          color: const Color(0xFFDCE9FF),
           image: const DecorationImage(
-            // Menggunakan gambar placeholder, ganti dengan asset/network Anda
             image: NetworkImage(
               'https://images.unsplash.com/photo-1438032005730-c779502df39b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
             ),
@@ -137,7 +132,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         child: Stack(
           children: [
-            // Gradient gelap di bagian bawah agar teks terbaca
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -148,7 +142,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-            // Konten Text di dalam Banner
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -161,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF775A19), // secondary color
+                      color: const Color(0xFF775A19),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Text(
@@ -218,7 +211,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           title: 'Smart QR',
           routeName: '/smart_qr',
           isPrimary:
-              true, // <--- Dipindah ke sini agar Smart QR jadi mencolok (Hitam elegan)
+              true,
         ),
         _buildMenuCard(
           context: context,
@@ -261,7 +254,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           icon: Icons.volunteer_activism,
           title: 'Persembahan',
           routeName: '/offering',
-          // Menjadi pastel senada dengan ikon hati/tangan (merah muda lembut)
           cardBgColor: const Color(0xFFFFF0F3),
           iconBgColor: const Color(0xFFFFD6E0),
           iconColor: const Color(0xFFD90429),
@@ -309,21 +301,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           child: Stack(
             children: [
-              // --- UBAH BAGIAN WATERMARK INI ---
               if (isPrimary)
                 Positioned.fill(
                   child: Center(
                     child: Icon(
                       icon,
-                      size: 80, // Dibuat lebih besar agar memenuhi area tengah
+                      size: 80,
                       color: Colors.white.withOpacity(
                         0.08,
-                      ), // Opacity disesuaikan agar tidak menutupi teks
+                      ),
                     ),
                   ),
                 ),
 
-              // ---------------------------------
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

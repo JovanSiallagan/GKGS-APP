@@ -10,17 +10,15 @@ export class EventService {
     return this.prisma.event.create({
       data: {
         ...dto,
-        date: new Date(dto.date), // Ubah string ke format Date
+        date: new Date(dto.date),
       },
     });
   }
 
   findAll() {
-    // Sangat simpel! Prisma otomatis akan membawa data 'totalHadir'
-    // bersama dengan id, title, description, dan date ke Flutter.
     return this.prisma.event.findMany({
       orderBy: {
-        date: 'desc', // Mengurutkan dari acara yang paling baru
+        date: 'desc',
       },
     });
   }
